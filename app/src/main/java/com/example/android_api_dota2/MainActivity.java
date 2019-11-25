@@ -25,13 +25,13 @@ public class MainActivity extends AppCompatActivity {
         reponse.start();
     }
 
-    protected void initRecycler(List<Characters> changesList){
-        liste_persos = findViewById(R.id.liste_persos);
+    protected void initRecycler(List<Heroes> changesList){
+        liste_persos = findViewById(R.id.liste_heros);
         liste_persos.setHasFixedSize(true);
         //De manière à ce qu'il ne reste pas une ligne à moitié vide(/pleine)
         layoutManager = new GridLayoutManager(this, 2);
         liste_persos.setLayoutManager(layoutManager);
-        adaptateur = new PersoAdapter(changesList);
+        adaptateur = new HerosAdapter(changesList);
         liste_persos.setAdapter(adaptateur);
     }
 }

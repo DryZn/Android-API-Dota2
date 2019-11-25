@@ -15,9 +15,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ControllerAPI implements Callback<List<Characters>>{
+public class ControllerAPI implements Callback<List<Heroes>>{
     static final String BASE_URL = "https://api.opendota.com/api/";
-    //static final String BASE_URL = "https://api.kuroganehammer.com";
     private MainActivity view;
     private SharedPreferences sharedPreferences;
 
@@ -36,17 +35,17 @@ public class ControllerAPI implements Callback<List<Characters>>{
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        SmashAPI smashAPI = retrofit.create(SmashAPI.class);
+        DotaAPI smashAPI = retrofit.create(DotaAPI.class);
 
-        Call<List<Characters>> call = smashAPI.loadChanges();
+        Call<List<Heroes>> call = smashAPI.loadChanges();
         call.enqueue(this);
 
     }
 
     @Override
-    public void onResponse(Call<List<Characters>> call, Response<List<Characters>> response) {
+    public void onResponse(Call<List<Heroes>> call, Response<List<Heroes>> response) {
         if(response.isSuccessful()) {
-            List<Characters> changesList = response.body();
+            List<Heroes> changesList = response.body();
             view.initRecycler(changesList);
             save(changesList);
         } else {
@@ -55,15 +54,15 @@ public class ControllerAPI implements Callback<List<Characters>>{
     }
 
     @Override
-    public void onFailure(Call<List<Characters>> call, Throwable t) {
+    public void onFailure(Call<List<Heroes>> call, Throwable t) {
         t.printStackTrace();
 
         //Au cas ou le téléphone n est pas encore connecté a internet, on réessaie jusqu'à l'être
-        List<Characters> changesList = getSave();
+        List<Heroes> changesList = getSave();
         view.initRecycler(changesList);
     }
 
-    private void save(List<Characters> changesList) {
+    private void save(List<Heroes> changesList) {
         String changesListString = new Gson().toJson(changesList);
         sharedPreferences
                 .edit()
@@ -72,10 +71,10 @@ public class ControllerAPI implements Callback<List<Characters>>{
 
     }
     //inverse de save
-    private List<Characters> getSave() {
+    private List<Heroes> getSave() {
         String changesListString = sharedPreferences.getString("liste", "");
-        Type changeListType = new TypeToken<List<Characters>>(){}.getType();
-        List<Characters> changesList = new Gson().fromJson(changesListString, changeListType);
+        Type changeListType = new TypeToken<List<Heroes>>(){}.getType();
+        List<Heroes> changesList = new Gson().fromJson(changesListString, changeListType);
         return changesList;
     }
 }

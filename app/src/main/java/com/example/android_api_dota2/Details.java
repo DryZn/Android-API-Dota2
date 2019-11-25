@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 public class Details extends AppCompatActivity {
-    public static Characters perso;
+    public static Heroes hero;
     private ImageView imageStats;
     private String[] phrases;
     public static int compteur;
@@ -23,8 +23,8 @@ public class Details extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_activity);
-        imageStats = findViewById(R.id.perso);
-        Picasso.get().load(perso.getStatsUrl()).into(imageStats);
+        imageStats = findViewById(R.id.hero);
+        Picasso.get().load(hero.getStatsUrl()).into(imageStats);
         imageStats.setDrawingCacheEnabled(true); //plus d'une heure de recherche pour cette ligne
         Toast.makeText(this, phrases[compteur], Toast.LENGTH_LONG).show();
     }

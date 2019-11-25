@@ -12,8 +12,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class PersoAdapter extends android.support.v7.widget.RecyclerView.Adapter<PersoAdapter.ViewHolder> {
-    private Characters[] mDataset;
+public class HerosAdapter extends android.support.v7.widget.RecyclerView.Adapter<HerosAdapter.ViewHolder> {
+    private Heroes[] mDataset;
     private int compteur;
 
     // Provide a reference to the views for each data item
@@ -34,7 +34,7 @@ public class PersoAdapter extends android.support.v7.widget.RecyclerView.Adapter
         @Override
         public void onClick(View v) {
             int position = this.getPosition();
-            Details.perso = mDataset[position];
+            Details.hero = mDataset[position];
             Details.compteur = compteur;
             Intent intent = new Intent(context, Details.class);
             context.startActivity(intent);
@@ -46,9 +46,9 @@ public class PersoAdapter extends android.support.v7.widget.RecyclerView.Adapter
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PersoAdapter(List<Characters> myDataset){
+    public HerosAdapter(List<Heroes> myDataset){
         compteur = 0;
-        mDataset = myDataset.toArray(new Characters[0]);
+        mDataset = myDataset.toArray(new Heroes[0]);
     }
 
     // Create new views (invoked by the layout manager)
