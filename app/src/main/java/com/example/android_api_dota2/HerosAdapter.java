@@ -65,11 +65,9 @@ public class HerosAdapter extends android.support.v7.widget.RecyclerView.Adapter
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        System.out.println("ici");
         String url = mDataset[position].getImgUrl();
         System.out.println(url);
         if(url != null && !url.isEmpty()){
-            System.out.println("ici");
             Picasso.get().load(mDataset[position].getImgUrl()).into(holder.imageView);
             //Picasso.with(holder.itemView.getContext()).load(url.replace("http", "https")).into(holder.imageView);
         }

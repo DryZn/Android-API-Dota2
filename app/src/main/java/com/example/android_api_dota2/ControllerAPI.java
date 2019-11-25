@@ -35,9 +35,9 @@ public class ControllerAPI implements Callback<List<Heroes>>{
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        DotaAPI smashAPI = retrofit.create(DotaAPI.class);
+        DotaAPI dotaAPI = retrofit.create(DotaAPI.class);
 
-        Call<List<Heroes>> call = smashAPI.loadChanges();
+        Call<List<Heroes>> call = dotaAPI.loadChanges();
         call.enqueue(this);
 
     }
