@@ -3,6 +3,7 @@ package com.example.android_api_dota2;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -10,6 +11,7 @@ import com.squareup.picasso.Picasso;
 public class Details extends AppCompatActivity {
     public static Heroes hero;
     private ImageView imageStats;
+    private TextView nomHero;
     private String[] phrases;
     public static int compteur;
 
@@ -27,5 +29,7 @@ public class Details extends AppCompatActivity {
         Picasso.get().load(hero.getStatsUrl()).into(imageStats);
         imageStats.setDrawingCacheEnabled(true); //plus d'une heure de recherche pour cette ligne
         Toast.makeText(this, phrases[compteur], Toast.LENGTH_LONG).show();
+        nomHero = findViewById(R.id.nomHero);
+        nomHero.setText(hero.getName());
     }
 }

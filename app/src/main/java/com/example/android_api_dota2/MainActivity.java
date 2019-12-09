@@ -7,7 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
-//rajouter mvvm observer et fragment
+//rajouter mvvm observer et fragment (transaction de fragments) voir aussi material design
 public class MainActivity extends AppCompatActivity {
     private RecyclerView liste_persos;
     private RecyclerView.Adapter adaptateur;
