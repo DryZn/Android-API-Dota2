@@ -3,13 +3,13 @@ package com.example.android_api_dota2;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 //rajouter mvvm observer et fragment (transaction de fragments) voir aussi material design
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView liste_persos;
+    private RecyclerView liste_heros;
     private RecyclerView.Adapter adaptateur;
     private RecyclerView.LayoutManager layoutManager;
     private ControllerAPI reponse;
@@ -25,12 +25,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void initRecycler(List<Heroes> changesList){
-        liste_persos = findViewById(R.id.liste_heros);
-        liste_persos.setHasFixedSize(true);
-        //De manière à ce qu'il ne reste pas une ligne à moitié vide(/pleine)
-        layoutManager = new GridLayoutManager(this, 2);
-        liste_persos.setLayoutManager(layoutManager);
+        liste_heros = findViewById(R.id.liste_heros);
+        liste_heros.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        liste_heros.setLayoutManager(layoutManager);
         adaptateur = new HerosAdapter(changesList);
-        liste_persos.setAdapter(adaptateur);
+        liste_heros.setAdapter(adaptateur);
     }
 }

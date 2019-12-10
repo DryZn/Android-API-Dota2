@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="150dp"
-    android:layout_height="150dp"
-    android:padding="4dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="175dp"
+    android:layout_height="123dp"
+    android:orientation="vertical"
+    android:padding="2dp">
 
     <ImageView
-        android:id="@+id/icon"
-        android:layout_width="146dp"
-        android:layout_height="146dp"
-        android:layout_marginLeft="15dp"
+        android:id="@+id/iconHero"
+        android:layout_width="match_parent"
+        android:layout_height="99dp"
+        android:layout_marginLeft="10dp"
         android:src="@mipmap/ic_launcher" />
-</RelativeLayout>
+
+    <TextView
+        android:id="@+id/nomHero"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="test"
+        android:textSize="14dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:textAlignment="center" />
+</LinearLayout>
