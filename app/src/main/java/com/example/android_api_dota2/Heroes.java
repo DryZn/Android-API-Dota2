@@ -4,7 +4,7 @@ public class Heroes {
     String localized_name;
     String name;
 
-    //Url des images des personnages
+    // Url des images des personnages
     public String getImgUrl() {
         // lien de l'image avec le nom au bon format
         System.out.println(localized_name.replace(" ","_"));
@@ -16,7 +16,7 @@ public class Heroes {
         return "https://api.opendota.com/apps/dota2/images/heroes/" + localized_name.replace(" ","_").replace("-","").toLowerCase() + "_full.png";
     }
 
-    //Url des imagees de leurs statistiques
+    // Nom des heros
     public String getName() {
         name = name.replace("npc_dota_hero_","").replace("_"," ");
         // un nom de heros n'est jamais compose de plus de deux parties
