@@ -3,12 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <!-- A RecyclerView with some commonly used attributes -->
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/liste_heros"
+    <LinearLayout
+        android:id="@+id/heroes_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scrollbars="vertical" />
+    />
+
 </LinearLayout>

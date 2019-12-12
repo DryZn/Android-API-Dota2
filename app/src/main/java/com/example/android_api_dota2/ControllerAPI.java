@@ -57,7 +57,7 @@ public class ControllerAPI implements Callback<List<Heroes>>{
     public void onFailure(Call<List<Heroes>> call, Throwable t) {
         t.printStackTrace();
 
-        //Au cas ou le téléphone n est pas encore connecté a internet, on réessaie jusqu'à l'être
+        //Au cas ou le telephone n est pas encore connecte a internet, on recharge la memoire en cache
         List<Heroes> changesList = getSave();
         view.initRecycler(changesList);
     }
@@ -66,13 +66,13 @@ public class ControllerAPI implements Callback<List<Heroes>>{
         String changesListString = new Gson().toJson(changesList);
         sharedPreferences
                 .edit()
-                .putString("liste", changesListString)
+                .putString("list", changesListString)
                 .apply();
 
     }
     //inverse de save
     private List<Heroes> getSave() {
-        String changesListString = sharedPreferences.getString("liste", "");
+        String changesListString = sharedPreferences.getString("list", "");
         Type changeListType = new TypeToken<List<Heroes>>(){}.getType();
         List<Heroes> changesList = new Gson().fromJson(changesListString, changeListType);
         return changesList;

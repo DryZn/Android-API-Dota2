@@ -13,10 +13,8 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 public class Details extends FragmentActivity implements PictureHeroCB {
-    public String Fragments = "pictureheroTag";
+    public String pictureheroTag = "pictureheroTag";
     public static Heroes hero;
-    private ImageView imageStats;
-    private TextView nomHero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +23,11 @@ public class Details extends FragmentActivity implements PictureHeroCB {
         if (savedInstanceState == null) {
             FragmentManager manager = getSupportFragmentManager();
             // regarder si le fragment est deja charge
-            ListFragment frgm = (ListFragment) manager.findFragmentByTag(Fragments);
+            PictureHero frgm = (PictureHero) manager.findFragmentByTag(pictureheroTag);
             if (frgm == null)
-                frgm = new ListFragment();
+                frgm = new PictureHero();
+            // Passage des arguments
+            frgm.hero = this.hero;
             // ajout sur la view
             manager.beginTransaction().add(R.id.picture_hero, frgm).commit();
         }
@@ -35,10 +35,6 @@ public class Details extends FragmentActivity implements PictureHeroCB {
 
     @Override
     public void displayHero(int pos) {
-        imageStats = findViewById(R.id.hero);
-        Picasso.get().load(hero.getStatsUrl()).into(imageStats);
-        imageStats.setDrawingCacheEnabled(true); //plus d'une heure de recherche pour cette ligne*
-        nomHero = findViewById(R.id.nomHero);
-        nomHero.setText(hero.getName());
+        System.out.println("Impressionnant!");
     }
 }
