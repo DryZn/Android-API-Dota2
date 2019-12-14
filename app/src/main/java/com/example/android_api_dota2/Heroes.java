@@ -1,22 +1,28 @@
 package com.example.android_api_dota2;
 
 public class Heroes {
-    String name;
     String localized_name;
+    String primary_attr;
+    String attack_type;
+    String[] roles;
+    String img;
 
-    // Url des images des personnages
+    // Url des images des images personnages
     public String getImgUrl() {
         // lien de l'image avec le nom au bon format
-        return "https://api.opendota.com/apps/dota2/images/heroes/" + name.replace("npc_dota_hero_","") + "_full.png";
+        return "https://api.opendota.com" + img;
     }
 
-    //Url des imagees de leurs statistiques
-    public String getStatsUrl() {
-        return "https://api.opendota.com/apps/dota2/images/heroes/" + localized_name.replace(" ","_").replace("-","").toLowerCase() + "_full.png";
+    public String getAttackType() {
+        if (this.attack_type.equals("Melee"))
+            return "Mêlée";
+        else return "Distance";
     }
-
-    // Nom des heros
-    public String getName() {
-        return localized_name;
+    // Url des images des personnages
+    public String getRoles() {
+        String strRoles = "";
+        for (String role : roles)
+            strRoles += role + " ";
+        return strRoles;
     }
 }

@@ -1,23 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="175dp"
-    android:layout_height="123dp"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:padding="2dp">
 
-    <ImageView
-        android:id="@+id/iconHero"
-        android:layout_width="match_parent"
-        android:layout_height="99dp"
-        android:layout_marginLeft="10dp"
-        android:src="@mipmap/ic_launcher" />
+    <LinearLayout
+        android:layout_width="73dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/picture"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Grimstroke"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textSize="12dp" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/nomHero"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:text="test"
-        android:textSize="14dp"
+        android:id="@+id/attackType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="12dp"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-        android:textAlignment="center" />
+        android:textSize="13dp" />
+
+    <TextView
+        android:id="@+id/role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:textSize="13dp" />
 </LinearLayout>
