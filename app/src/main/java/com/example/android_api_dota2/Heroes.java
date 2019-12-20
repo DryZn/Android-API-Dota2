@@ -14,7 +14,7 @@ public class Heroes {
     }
 
     public String getAttackType() {
-        if (this.attack_type.equals("Melee"))
+        if (attack_type.equals("Melee"))
             return "Mêlée";
         else return "Distance";
     }

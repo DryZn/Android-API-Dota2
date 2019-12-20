@@ -1,6 +1,7 @@
 package com.example.android_api_dota2;
 
 import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -19,10 +20,12 @@ public class ControllerAPI implements Callback<List<Heroes>>{
     static final String BASE_URL = "https://api.opendota.com/api/";
     private MainActivity view;
     private SharedPreferences sharedPreferences;
+    String dataName;
 
-    public ControllerAPI(MainActivity view, SharedPreferences sharedPreferences) {
+    public ControllerAPI(MainActivity view, SharedPreferences sharedPreferences, String dataName) {
         this.view = view;
         this.sharedPreferences = sharedPreferences;
+        this.dataName = dataName;
     }
 
     public void start() {
@@ -47,10 +50,10 @@ public class ControllerAPI implements Callback<List<Heroes>>{
         if(response.isSuccessful()) {
             System.out.println("ici ");
             System.out.println(response.headers());
-            List<Heroes> changesList = response.body();
-            view.initRecycler(changesList);
+            List<Heroes> itemList = response.body();
+            view.initRecylcer(itemList);
             // mise en cache des nouvelles donnees
-            save(changesList);
+            save(itemList);
         } else {
             System.out.println(response.errorBody());
         }
@@ -61,20 +64,20 @@ public class ControllerAPI implements Callback<List<Heroes>>{
         t.printStackTrace();
         //Au cas ou le telephone n est pas encore connecte a internet, on recharge la memoire en cache
         List<Heroes> changesList = getSave();
-        view.initRecycler(changesList);
+        view.initRecylcer(changesList);
     }
 
     private void save(List<Heroes> changesList) {
         String changesListString = new Gson().toJson(changesList);
         sharedPreferences
                 .edit()
-                .putString("DotaData", changesListString)
+                .putString(dataName, changesListString)
                 .apply();
 
     }
 
     private List<Heroes> getSave() {
-        String changesListString = sharedPreferences.getString("DotaData", "");
+        String changesListString = sharedPreferences.getString(dataName, "");
         Type changeListType = new TypeToken<List<Heroes>>(){}.getType();
         List<Heroes> changesList = new Gson().fromJson(changesListString, changeListType);
         return changesList;
