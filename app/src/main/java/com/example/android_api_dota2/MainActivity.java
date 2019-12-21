@@ -2,16 +2,13 @@ package com.example.android_api_dota2;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import java.util.List;
-
 //rajouter mvvm observer voir aussi material design et revoir mise en cache avec get save
-public class MainActivity extends AppCompatActivity implements PictureHeroCB {
+public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private RecyclerView list_heroes;
     private RecyclerView.Adapter adaptateur;
     private RecyclerView.LayoutManager layoutManager;
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements PictureHeroCB {
     }
 
     // fonction sert a creer le recyclerview
-    protected void initRecycler(List<Heroes> itemList){
+    /*protected void initRecycler(List<Heroes> itemList){
         list_heroes = findViewById(recycler);
         list_heroes.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -67,9 +64,10 @@ public class MainActivity extends AppCompatActivity implements PictureHeroCB {
         list_heroes.setAdapter(adaptateur);
         heroesList.list_heroes = list_heroes;
         heroesList.adaptateur = adaptateur;
-    }
+    }*/
 
-    protected void watchDetails(Heroes hero) {
+    @Override
+    public void watchDetails(Heroes hero) {
         PictureHero details = new PictureHero();
         details.hero = hero;
         // mise en backstack du fragment actuel avant de le remplacer par la vue en details
@@ -94,10 +92,4 @@ public class MainActivity extends AppCompatActivity implements PictureHeroCB {
                 this.initHeroList();
         }
     }*/
-
-    // pas encore bien compris les callbacks
-    @Override
-    public void displayHero(int pos) {
-        System.out.println("Impressionnant!");
-    }
 }

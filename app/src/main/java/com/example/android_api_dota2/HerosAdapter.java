@@ -15,7 +15,7 @@ import java.util.List;
 
 
 public class HerosAdapter extends android.support.v7.widget.RecyclerView.Adapter<HerosAdapter.ViewHolder> {
-    private MainActivity vmain;
+    private RecylcerFrag vmain;
     private Heroes[] mDataset;
 
     // Provide a reference to the views for each data item
@@ -46,7 +46,7 @@ public class HerosAdapter extends android.support.v7.widget.RecyclerView.Adapter
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public HerosAdapter(MainActivity vmain, List<Heroes> myDataset){
+    public HerosAdapter(RecylcerFrag vmain, List<Heroes> myDataset){
         this.vmain = vmain;
         mDataset = myDataset.toArray(new Heroes[0]);
     }
