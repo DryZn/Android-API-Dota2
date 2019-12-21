@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 public class PictureHero extends Fragment {
-    private PictureHeroCB parent;
     public static Heroes hero;
 
     @Override

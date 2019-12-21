@@ -73,9 +73,8 @@ public class ControllerAPI implements Callback<List<Heroes>>{
                 }
                 if (!replaced) heroesSortedList.add(heroesSortedList.size(), heroe);
             }
-            //view.initRecycler(heroesSortedList);
-            view.heroesList.adaptateur = new HerosAdapter(view.heroesList, heroesSortedList);
-            view.heroesList.list_heroes.swapAdapter(view.heroesList.adaptateur, false);
+            view.heroesList.adaptater = new HerosAdapter(view.heroesList, heroesSortedList);
+            view.heroesList.list_items.swapAdapter(view.heroesList.adaptater, false);
             // mise en cache des nouvelles donnees
             save(heroesSortedList);
         } else {
@@ -87,8 +86,9 @@ public class ControllerAPI implements Callback<List<Heroes>>{
     public void onFailure(Call<List<Heroes>> call, Throwable t) {
         t.printStackTrace();
         //Au cas ou le telephone n est pas encore connecte a internet, on recharge la memoire en cache
-        List<Heroes> changesList = getSave();
-        //view.initRecycler(changesList);
+        List<Heroes> savedList = getSave();
+        view.heroesList.adaptater = new HerosAdapter(view.heroesList, savedList);
+        view.heroesList.list_items.swapAdapter(view.heroesList.adaptater, false);
     }
 
     private void save(List<Heroes> changesList) {
