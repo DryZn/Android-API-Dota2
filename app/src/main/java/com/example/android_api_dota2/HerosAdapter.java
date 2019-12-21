@@ -15,6 +15,7 @@ import java.util.List;
 
 
 public class HerosAdapter extends android.support.v7.widget.RecyclerView.Adapter<HerosAdapter.ViewHolder> {
+    private MainActivity vmain;
     private Heroes[] mDataset;
 
     // Provide a reference to the views for each data item
@@ -40,14 +41,13 @@ public class HerosAdapter extends android.support.v7.widget.RecyclerView.Adapter
         @Override
         public void onClick(View v) {
             int position = this.getPosition();
-            Details.hero = mDataset[position];
-            Intent intent = new Intent(context, Details.class);
-            context.startActivity(intent);
+            vmain.watchDetails(mDataset[position]);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public HerosAdapter(List<Heroes> myDataset){
+    public HerosAdapter(MainActivity vmain, List<Heroes> myDataset){
+        this.vmain = vmain;
         mDataset = myDataset.toArray(new Heroes[0]);
     }
 

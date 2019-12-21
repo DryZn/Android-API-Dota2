@@ -2,6 +2,7 @@ package com.example.android_api_dota2;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import com.squareup.picasso.Picasso;
 
 public class PictureHero extends Fragment {
     private PictureHeroCB parent;
-    public PictureHero fragPictHero;
     public static Heroes hero;
     private ImageView imageStats;
     private TextView heroName;
@@ -31,12 +31,8 @@ public class PictureHero extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
-        parent = (PictureHeroCB) activity;
-    }
-
-    public void displayHero (int pos){
-        parent.displayHero(pos);
+        parent = (PictureHeroCB) getActivity();
     }
 }

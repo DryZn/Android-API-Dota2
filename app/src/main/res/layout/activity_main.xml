@@ -3,12 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/heroes_content"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
     />
 
+    <FrameLayout
+        android:id="@+id/picture_hero"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.example.android_api_dota2.PictureHero"
+        />
 </LinearLayout>

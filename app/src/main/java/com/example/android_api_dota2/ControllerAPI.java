@@ -54,7 +54,6 @@ public class ControllerAPI implements Callback<List<Heroes>>{
             List<Heroes> heroesList = response.body();
             // tri par ordre alphabetique (oui l'api ne le fait pas)
             List<Heroes> heroesSortedList = new ArrayList<Heroes>();
-            heroesSortedList.add(0, heroesList.get(0));
             boolean replaced;
             for (Heroes heroe : heroesList){
                 replaced = false;
@@ -70,7 +69,7 @@ public class ControllerAPI implements Callback<List<Heroes>>{
                             else if (heroe.localized_name.charAt(i) > heroeComp.localized_name.charAt(i)) break;
                         }
                     }
-                    if (replaced) break; // je n'ai aucune honte
+                    if (replaced) break;
                 }
                 if (!replaced) heroesSortedList.add(heroesSortedList.size(), heroe);
             }
