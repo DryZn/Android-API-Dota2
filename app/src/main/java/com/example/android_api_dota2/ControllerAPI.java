@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -50,13 +51,32 @@ public class ControllerAPI implements Callback<List<Heroes>>{
         if(response.isSuccessful()) {
             System.out.println("ici ");
             System.out.println(response.headers());
-            List<Heroes> itemList = response.body();
-            System.out.println(itemList);
-            // tri par ordre alphabetique
-
-            view.initRecycler(itemList);
+            List<Heroes> heroesList = response.body();
+            // tri par ordre alphabetique (oui l'api ne le fait pas)
+            List<Heroes> heroesSortedList = new ArrayList<Heroes>();
+            heroesSortedList.add(0, heroesList.get(0));
+            boolean replaced;
+            for (Heroes heroe : heroesList){
+                replaced = false;
+                for (Heroes heroeComp : heroesSortedList) {
+                    if (heroe.localized_name != heroeComp.localized_name) {
+                        // Valve ne va pas ajouter de hero qui a le meme nom qu'un autre avec des caracteres en moins a la fin
+                        for (int i = 0; i < heroe.localized_name.length(); i++) {
+                            if (heroe.localized_name.charAt(i) < heroeComp.localized_name.charAt(i)){
+                                heroesSortedList.add(heroesSortedList.indexOf(heroeComp), heroe);
+                                replaced = true;
+                                break;
+                            }
+                            else if (heroe.localized_name.charAt(i) > heroeComp.localized_name.charAt(i)) break;
+                        }
+                    }
+                    if (replaced) break; // je n'ai aucune honte
+                }
+                if (!replaced) heroesSortedList.add(heroesSortedList.size(), heroe);
+            }
+            view.initRecycler(heroesSortedList);
             // mise en cache des nouvelles donnees
-            save(itemList);
+            save(heroesSortedList);
         } else {
             System.out.println(response.errorBody());
         }
