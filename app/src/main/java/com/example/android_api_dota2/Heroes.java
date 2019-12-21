@@ -7,7 +7,7 @@ public class Heroes {
     String[] roles;
     String img;
 
-    // Url des images des images personnages
+    // Url des images des images heros
     public String getImgUrl() {
         // lien de l'image avec le nom au bon format
         return "https://api.opendota.com" + img;
@@ -18,7 +18,8 @@ public class Heroes {
             return "Mêlée";
         else return "Distance";
     }
-    // Url des images des personnages
+
+    // Roles des heros dans une partie (ex: carry nuker)
     public String getRoles() {
         String strRoles = "";
         for (String role : roles)

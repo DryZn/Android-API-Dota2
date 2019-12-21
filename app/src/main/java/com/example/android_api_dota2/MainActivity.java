@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private SharedPreferences sharedPreferences;
     private FragmentManager manager;
+    private int recycler;
     ControllerAPI response;
 
     @Override
@@ -33,20 +34,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initHeroList() {
-        HeroesList heroesList = new HeroesList();
-        heroesList.sharedPreferences = sharedPreferences;
-        heroesList.parentActivity = this;
+        RecylcerFrag heroesList = new RecylcerFrag();
+        heroesList.layout = R.layout.heroes_list;
         manager.beginTransaction().add(R.id.heroes_content, heroesList).commit();
+        recycler = R.id.list_heroes;
     }
 
-    // ici la fonction sert a creer le recyclerview
-    protected void initRecylcer(List<Heroes> itemList){
-        list_heroes = findViewById(R.id.list_heroes);
+    // fonction sert a creer le recyclerview
+    protected void initRecycler(List<Heroes> itemList){
+        list_heroes = findViewById(recycler);
         list_heroes.setHasFixedSize(true);
-        // voir s'il n'y a pas d'autres moyen de communiquer une activite parente
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         list_heroes.setLayoutManager(layoutManager);
-        adaptateur = new HerosAdapter(itemList);
+        // choix de l'adaptateur en fonction de la liste a instancier
+        switch (recycler){
+            case R.id.list_heroes:
+                adaptateur = new HerosAdapter(itemList);
+        }
         list_heroes.setAdapter(adaptateur);
     }
 }

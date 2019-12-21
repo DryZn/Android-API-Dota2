@@ -11,7 +11,7 @@ public interface DotaAPI {
     Call<List<Heroes>> getHeroes();
 
     @GET("proPlayers")
-    Call<Heroes> getPros(@Path("name") String nameSearched);
+    Call<List<Heroes>> getPros(@Path("name") String nameSearched);
 
     // avoir le nom d'un utilisateur recherche
     @GET("search?q={name}") //tester en remplacant par query

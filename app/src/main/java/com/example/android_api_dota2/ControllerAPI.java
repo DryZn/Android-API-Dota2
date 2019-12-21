@@ -51,7 +51,10 @@ public class ControllerAPI implements Callback<List<Heroes>>{
             System.out.println("ici ");
             System.out.println(response.headers());
             List<Heroes> itemList = response.body();
-            view.initRecylcer(itemList);
+            System.out.println(itemList);
+            // tri par ordre alphabetique
+
+            view.initRecycler(itemList);
             // mise en cache des nouvelles donnees
             save(itemList);
         } else {
@@ -64,7 +67,7 @@ public class ControllerAPI implements Callback<List<Heroes>>{
         t.printStackTrace();
         //Au cas ou le telephone n est pas encore connecte a internet, on recharge la memoire en cache
         List<Heroes> changesList = getSave();
-        view.initRecylcer(changesList);
+        view.initRecycler(changesList);
     }
 
     private void save(List<Heroes> changesList) {
