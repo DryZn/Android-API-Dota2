@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
-    ActionBarDrawerToggle drawerToggle;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             // attachement du drawer et du toolbar pour pouvoir afficher une icone "hamburger" (avec animations)
-            drawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+            drawerToggle = setupDrawerToggle();
             drawerToggle.setDrawerIndicatorEnabled(true);
             drawerToggle.syncState();
             mDrawer.addDrawerListener(drawerToggle);
@@ -46,7 +46,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
             // initialisation du navbar
             nvDrawer = findViewById(R.id.nvView);
             initDrawerContent(nvDrawer);
+        } else {
+            try{heroesList.isVisible();} catch (Exception e){}
         }
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
+        // and will not render the hamburger icon without it.
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
     }
 
     private void initDrawerContent(NavigationView navigationView) {
@@ -130,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         return super.onOptionsItemSelected(item);
     }
 
+    // ces deux surcharges permettent de restaurer la vue correctement meme si l'on a bascule l'ecran entre-temps
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
