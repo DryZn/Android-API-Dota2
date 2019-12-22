@@ -25,8 +25,7 @@
             android:id="@+id/picture_hero"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            class="com.example.android_api_dota2.PictureHero" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

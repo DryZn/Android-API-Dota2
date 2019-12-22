@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
-            android:hint="Username" />
+            android:hint="@string/search" />
 
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.appcompat.widget.Toolbar>

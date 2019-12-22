@@ -1,9 +1,12 @@
 package com.example.android_api_dota2;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
+    ActionBarDrawerToggle drawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,39 +31,36 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         // initialisation si necessaire
         if (savedInstanceState == null) {
             setContentView(R.layout.activity_main);
-
-            // Set a Toolbar to replace the ActionBar.
+            // Le drawer permet de gerer l'affichage du toolbar/navbar
+            mDrawer = findViewById(R.id.drawer_layout);
+            // initialisation du toolbar
             toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            // This will display an Up icon (<-), we will replace it with hamburger later
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            // Find our drawer view
-            mDrawer = findViewById(R.id.drawer_layout);
-            // Find our drawer view
-            nvDrawer = (NavigationView) findViewById(R.id.nvView);
-            // Setup drawer view
-            setupDrawerContent(nvDrawer);
+            // attachement du drawer et du toolbar pour pouvoir afficher une icone "hamburger" (avec animations)
+            drawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+            drawerToggle.setDrawerIndicatorEnabled(true);
+            drawerToggle.syncState();
+            mDrawer.addDrawerListener(drawerToggle);
 
-            /*SharedPreferences sharedPreferences = getBaseContext().getSharedPreferences("DotaAppli", MODE_PRIVATE);
-            ControllerAPI response  = new ControllerAPI(this, sharedPreferences, "HeroesData");
-            response.start();
-            manager = getSupportFragmentManager();
-            initHeroList();*/
+            // initialisation du navbar
+            nvDrawer = findViewById(R.id.nvView);
+            initDrawerContent(nvDrawer);
         }
     }
 
-    private void setupDrawerContent(NavigationView navigationView) {
+    private void initDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        selectDrawerItem(menuItem);
+                        showNewFragment(menuItem);
                         return true;
                     }
                 });
     }
 
-    public void selectDrawerItem(MenuItem menuItem) {
+    public void showNewFragment(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass;
@@ -122,13 +123,24 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // affichage du menu lorsque l'on appuie sur l'icone prevue a cet effet
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
+        // affichage du menu lorsque l'on appuie sur l'icone prevue a cet effet en prenant les evenements du toolbar
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggles
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 }
