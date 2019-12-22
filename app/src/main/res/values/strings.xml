@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Dota2 API</string>>
+    <string name="app_name">Dota2 API</string>
+    <string name="menu_fist">Héros</string>
+    <string name="menu_second">Equipes</string>
+    <string name="menu_third">Communauté</string>
     <string name="search">Rechercher...</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

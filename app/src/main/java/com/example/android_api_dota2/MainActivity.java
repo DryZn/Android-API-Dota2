@@ -3,13 +3,14 @@ package com.example.android_api_dota2;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,8 +23,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     protected RecyclerFrag heroesList;
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
-    private NavigationView nvDrawer;
+    private NavigationView navbar;
     private ActionBarDrawerToggle drawerToggle;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         // initialisation si necessaire
         if (savedInstanceState == null) {
             setContentView(R.layout.activity_main);
+            // pour les appels a l'api
+            sharedPreferences = getBaseContext().getSharedPreferences("DotaAppli", MODE_PRIVATE);
+            // pour la gestion des fragments
+            manager = getSupportFragmentManager();
             // Le drawer permet de gerer l'affichage du toolbar/navbar
             mDrawer = findViewById(R.id.drawer_layout);
             // initialisation du toolbar
@@ -38,26 +44,23 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             // attachement du drawer et du toolbar pour pouvoir afficher une icone "hamburger" (avec animations)
-            drawerToggle = setupDrawerToggle();
+            drawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
             drawerToggle.setDrawerIndicatorEnabled(true);
             drawerToggle.syncState();
             mDrawer.addDrawerListener(drawerToggle);
 
-            // initialisation du navbar
-            nvDrawer = findViewById(R.id.nvView);
-            initDrawerContent(nvDrawer);
+            // initialisation du navbar et lancement du fragment voulu
+            navbar = findViewById(R.id.navbar);
+            initNavbarContent(navbar);
+            showNewFragment(navbar.getMenu().getItem(0));
         } else {
+            // affichage des fragments deja visibles
             try{heroesList.isVisible();} catch (Exception e){}
         }
     }
 
-    private ActionBarDrawerToggle setupDrawerToggle() {
-        // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
-        // and will not render the hamburger icon without it.
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
-    }
-
-    private void initDrawerContent(NavigationView navigationView) {
+    // association des fonctions liees au menu
+    private void initNavbarContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -74,10 +77,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                SharedPreferences sharedPreferences = getBaseContext().getSharedPreferences("DotaAppli", MODE_PRIVATE);
-                ControllerAPI response  = new ControllerAPI(this, sharedPreferences, "HeroesData");
-                response.start();
-                manager = getSupportFragmentManager();
+                // initialisation du fragment de la liste des heros
                 initHeroList();
                 break;
             case R.id.nav_second_fragment:
@@ -99,9 +99,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.heroes_content, fragment).commit();*/
 
-        // Highlight the selected item has been done by NavigationView
+        // Highlight the selected item has been done by NavigationView and Set action bar title
         menuItem.setChecked(true);
-        // Set action bar title
         setTitle(menuItem.getTitle());
         // Close the navigation drawer
         mDrawer.closeDrawers();
@@ -111,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         // regarder si le fragment est deja charge en memoire
         heroesList = (RecyclerFrag) manager.findFragmentByTag("herolist");
         if (heroesList == null) {
+            ControllerAPI response  = new ControllerAPI(this, sharedPreferences, "HeroesData");
+            response.start();
             heroesList = new RecyclerFrag();
             heroesList.layout = R.layout.recycler_fragment;
             manager.beginTransaction().add(R.id.heroes_content, heroesList, "herolist").commit();
