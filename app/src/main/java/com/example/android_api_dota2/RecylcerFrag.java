@@ -2,12 +2,13 @@ package com.example.android_api_dota2;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 // Fragment qui permet de contenir une liste RecyclerView mais son initialistation se fait dans le mainActivity
 public class RecylcerFrag extends Fragment {
@@ -25,7 +26,7 @@ public class RecylcerFrag extends Fragment {
         // initialisation du recyclerview
         list_items = view.findViewById(R.id.list_heroes);
         list_items.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         list_items.setLayoutManager(layoutManager);
         list_items.setAdapter(null);
         return view;

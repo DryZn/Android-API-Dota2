@@ -2,8 +2,9 @@ package com.example.android_api_dota2;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 //rajouter mvvm observer voir aussi material design et revoir mise en cache avec get save
 public class MainActivity extends AppCompatActivity implements RecyclerFragCB {

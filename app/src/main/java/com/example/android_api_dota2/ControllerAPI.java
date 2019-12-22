@@ -1,7 +1,6 @@
 package com.example.android_api_dota2;
 
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -52,27 +51,8 @@ public class ControllerAPI implements Callback<List<Heroes>>{
             System.out.println("ici ");
             System.out.println(response.headers());
             List<Heroes> heroesList = response.body();
-            // tri par ordre alphabetique (oui l'api ne le fait pas)
-            List<Heroes> heroesSortedList = new ArrayList<Heroes>();
-            boolean replaced;
-            for (Heroes heroe : heroesList){
-                replaced = false;
-                for (Heroes heroeComp : heroesSortedList) {
-                    if (heroe.localized_name != heroeComp.localized_name) {
-                        // Valve ne va pas ajouter de hero qui a le meme nom qu'un autre avec des caracteres en moins a la fin
-                        for (int i = 0; i < heroe.localized_name.length(); i++) {
-                            if (heroe.localized_name.charAt(i) < heroeComp.localized_name.charAt(i)){
-                                heroesSortedList.add(heroesSortedList.indexOf(heroeComp), heroe);
-                                replaced = true;
-                                break;
-                            }
-                            else if (heroe.localized_name.charAt(i) > heroeComp.localized_name.charAt(i)) break;
-                        }
-                    }
-                    if (replaced) break;
-                }
-                if (!replaced) heroesSortedList.add(heroesSortedList.size(), heroe);
-            }
+            // tri des donnees recues
+            List<Heroes> heroesSortedList = sortArray(heroesList, "");
             view.heroesList.adaptater = new HerosAdapter(view.heroesList, heroesSortedList);
             view.heroesList.list_items.swapAdapter(view.heroesList.adaptater, false);
             // mise en cache des nouvelles donnees
@@ -105,5 +85,37 @@ public class ControllerAPI implements Callback<List<Heroes>>{
         Type changeListType = new TypeToken<List<Heroes>>(){}.getType();
         List<Heroes> changesList = new Gson().fromJson(changesListString, changeListType);
         return changesList;
+    }
+
+    // fonction pour trier les heros en fonction du parametre donne
+    protected List<Heroes> sortArray(List<Heroes> heroesList, String sortType) {
+        List<Heroes> heroesSortedList = new ArrayList<>();
+        boolean replaced;
+
+        for (Heroes heroe : heroesList){
+            replaced = false;
+            for (Heroes heroeComp : heroesSortedList) {
+                switch (sortType) {
+                    // tri par ordre alphabetique (oui l'api ne le fait pas)
+                    default:
+                        if (heroe.localized_name != heroeComp.localized_name) {
+                            // Valve ne va pas ajouter de hero qui a presque le meme nom qu'un autre donc inutile de verifier quelle nom contient le plus de caracteres
+                            for (int i = 0; i < heroe.localized_name.length(); i++) {
+                                if (heroe.localized_name.charAt(i) < heroeComp.localized_name.charAt(i)) {
+                                    // insertion du heros dans la nouvelle liste si prioritaire
+                                    heroesSortedList.add(heroesSortedList.indexOf(heroeComp), heroe);
+                                    replaced = true;
+                                    break;
+                                } else if (heroe.localized_name.charAt(i) > heroeComp.localized_name.charAt(i))
+                                    break;
+                            }
+                        }
+                }
+                if (replaced) break;
+            }
+            // ajout a la fin de la liste si non prioritaire
+            if (!replaced) heroesSortedList.add(heroesSortedList.size(), heroe);
+        }
+        return heroesSortedList;
     }
 }

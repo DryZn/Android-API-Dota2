@@ -1,8 +1,8 @@
 package com.example.android_api_dota2;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import .test.InstrumentationRegistry;
+import .test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
