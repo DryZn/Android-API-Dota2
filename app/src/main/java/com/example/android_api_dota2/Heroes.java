@@ -1,11 +1,11 @@
 package com.example.android_api_dota2;
 
 public class Heroes {
-    String localized_name;
-    String primary_attr;
-    String attack_type;
-    String[] roles;
-    String img;
+    protected String localized_name;
+    protected String primary_attr;
+    protected String attack_type;
+    protected String[] roles;
+    protected String img;
 
     // Url des images des images heros
     public String getImgUrl() {

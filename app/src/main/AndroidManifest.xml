@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android_api_dota2">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -7,10 +8,10 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/dota_icon"
-        android:label="DOTA 2 API"
+        android:label="DOTA2 API"
         android:roundIcon="@mipmap/dota_icon"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/CustomAppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

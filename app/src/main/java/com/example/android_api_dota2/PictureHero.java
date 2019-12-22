@@ -19,11 +19,17 @@ public class PictureHero extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.picture_hero, container, false);
+        TextView heroName = view.findViewById(R.id.nomHero);
+        heroName.setText(hero.localized_name);
         ImageView imageStats = view.findViewById(R.id.hero);
         Picasso.get().load(hero.getImgUrl()).into(imageStats);
         imageStats.setDrawingCacheEnabled(true); //plus d'une heure de recherche pour cette ligne*
-        TextView heroName = view.findViewById(R.id.nomHero);
-        heroName.setText(hero.localized_name);
+        TextView heroAttackType = view.findViewById(R.id.attackType);
+        heroAttackType.setText(hero.getAttackType());
+        TextView heroRoles = view.findViewById(R.id.roles);
+        heroRoles.setText(hero.getRoles());
+        TextView heroAttrib = view.findViewById(R.id.attributes);
+        heroAttrib.setText(hero.attack_type);
         return view;
     }
 }

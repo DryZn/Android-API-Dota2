@@ -1,11 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="CustomAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!-- couleurs qui interviennent pour le theme de l'appli -->
+        <item name="colorPrimaryDark">@color/cardview_dark_background</item>
+        <item name="android:textColor">@color/cardview_light_background</item>
+        <item name="android:background">@color/cardview_dark_background</item>
     </style>
 
 </resources>

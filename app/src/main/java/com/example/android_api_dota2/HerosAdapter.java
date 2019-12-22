@@ -33,7 +33,7 @@ public class HerosAdapter extends android.support.v7.widget.RecyclerView.Adapter
             picture = v.findViewById(R.id.picture);
             name = v.findViewById(R.id.name);
             attackType = v.findViewById(R.id.attackType);
-            roles = v.findViewById(R.id.role);
+            roles = v.findViewById(R.id.roles);
             v.setOnClickListener(this);
         }
 
@@ -48,7 +48,9 @@ public class HerosAdapter extends android.support.v7.widget.RecyclerView.Adapter
     // Provide a suitable constructor (depends on the kind of dataset)
     public HerosAdapter(RecylcerFrag vmain, List<Heroes> myDataset){
         this.vmain = vmain;
-        mDataset = myDataset.toArray(new Heroes[0]);
+        try {
+            mDataset = myDataset.toArray(new Heroes[0]);
+        } catch (Exception e) {}
     }
 
     // Create new views (invoked by the layout manager)
