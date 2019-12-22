@@ -11,12 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 // Fragment qui permet de contenir une liste RecyclerView mais son initialistation se fait dans le mainActivity
-public class RecylcerFrag extends Fragment {
+public class RecyclerFrag extends Fragment {
     protected int layout;
     protected RecyclerView list_items;
     protected RecyclerView.Adapter adaptater;
     boolean firstCall = true;
-    RecyclerView.LayoutManager layoutManager;
     private RecyclerFragCB parent;
 
     @Override
@@ -26,7 +25,7 @@ public class RecylcerFrag extends Fragment {
         // initialisation du recyclerview
         list_items = view.findViewById(R.id.list_heroes);
         list_items.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         list_items.setLayoutManager(layoutManager);
         list_items.setAdapter(null);
         return view;

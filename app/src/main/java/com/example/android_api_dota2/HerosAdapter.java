@@ -1,6 +1,5 @@
 package com.example.android_api_dota2;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import java.util.List;
 
 
 public class HerosAdapter extends RecyclerView.Adapter<HerosAdapter.ViewHolder> {
-    private RecylcerFrag vmain;
+    private RecyclerFrag vmain;
     private Heroes[] mDataset;
 
     // Provide a reference to the views for each data item
@@ -25,11 +24,9 @@ public class HerosAdapter extends RecyclerView.Adapter<HerosAdapter.ViewHolder> 
         // each data item is just secondLine a string in this case
         public ImageView picture;
         public TextView name, attackType, roles;
-        private Context context;
 
         public ViewHolder(View v) {
             super(v);
-            context = v.getContext();
             picture = v.findViewById(R.id.picture);
             name = v.findViewById(R.id.name);
             attackType = v.findViewById(R.id.attackType);
@@ -46,7 +43,7 @@ public class HerosAdapter extends RecyclerView.Adapter<HerosAdapter.ViewHolder> 
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public HerosAdapter(RecylcerFrag vmain, List<Heroes> myDataset){
+    public HerosAdapter(RecyclerFrag vmain, List<Heroes> myDataset){
         this.vmain = vmain;
         try {
             mDataset = myDataset.toArray(new Heroes[0]);

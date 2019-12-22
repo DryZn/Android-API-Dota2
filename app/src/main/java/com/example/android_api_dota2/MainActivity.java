@@ -8,9 +8,8 @@ import androidx.fragment.app.FragmentManager;
 
 //rajouter mvvm observer voir aussi material design et revoir mise en cache avec get save
 public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
-    private SharedPreferences sharedPreferences;
     private FragmentManager manager;
-    protected RecylcerFrag heroesList;
+    protected RecyclerFrag heroesList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -18,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         // initialisation si necessaire
         if (savedInstanceState == null) {
             setContentView(R.layout.activity_main);
-            sharedPreferences = getBaseContext().getSharedPreferences("DotaAppli", MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getBaseContext().getSharedPreferences("DotaAppli", MODE_PRIVATE);
             ControllerAPI response  = new ControllerAPI(this, sharedPreferences, "HeroesData");
             response.start();
         manager = getSupportFragmentManager();
@@ -28,10 +27,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
 
     protected void initHeroList() {
         // regarder si le fragment est deja charge en memoire
-        heroesList = (RecylcerFrag) manager.findFragmentByTag("herolist");
+        heroesList = (RecyclerFrag) manager.findFragmentByTag("herolist");
         if (heroesList == null) {
-            heroesList = new RecylcerFrag();
-            heroesList.layout = R.layout.heroes_list;
+            heroesList = new RecyclerFrag();
+            heroesList.layout = R.layout.recycler_fragment;
             manager.beginTransaction().add(R.id.heroes_content, heroesList, "herolist").commit();
         } else {
             manager.popBackStackImmediate("herolist", FragmentManager.POP_BACK_STACK_INCLUSIVE);
