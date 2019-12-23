@@ -36,11 +36,11 @@ public class SearchAbilities extends Fragment implements AdapterView.OnItemSelec
         list_attackType.setAdapter(adapter);
         list_attackType.setOnItemSelectedListener(this);
 
-        Spinner list_attributes = view.findViewById(R.id.list_attributes);
+        /*Spinner list_attributes = view.findViewById(R.id.list_attributes);
         ArrayAdapter<CharSequence>  adapterThird = ArrayAdapter.createFromResource(getActivity(), R.array.attack_types, R.layout.spinner_item);
         adapterThird.setDropDownViewResource(R.layout.spinner_dropdown_item);
         list_attributes.setAdapter(adapterThird);
-        list_attributes.setOnItemSelectedListener(this);
+        list_attributes.setOnItemSelectedListener(this);*/
         return view;
     }
 

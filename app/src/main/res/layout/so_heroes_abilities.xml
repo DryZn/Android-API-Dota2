@@ -20,8 +20,8 @@
         android:spinnerMode="dropdown"
         style="@style/SpinnerBar"/>
 
-    <Spinner
+    <!--<Spinner
         android:id="@+id/list_attributes"
         android:spinnerMode="dropdown"
-        style="@style/SpinnerBar"/>
+        style="@style/SpinnerBar"/>-->
 </LinearLayout>

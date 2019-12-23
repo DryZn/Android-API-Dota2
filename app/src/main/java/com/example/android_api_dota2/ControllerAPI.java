@@ -21,12 +21,11 @@ public class ControllerAPI implements Callback<List<Heroes>>{
     static final String BASE_URL = "https://api.opendota.com/api/";
     private MainActivity view;
     private SharedPreferences sharedPreferences;
-    private String dataName;
+    protected String dataName;
 
-    public ControllerAPI(MainActivity view, SharedPreferences sharedPreferences, String dataName) {
+    public ControllerAPI(MainActivity view, SharedPreferences sharedPreferences) {
         this.view = view;
         this.sharedPreferences = sharedPreferences;
-        this.dataName = dataName;
     }
 
     public void start() {

@@ -9,12 +9,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
-//rajouter mvvm observer voir aussi material design et revoir mise en cache avec get save
 public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private FragmentManager manager;
     protected RecyclerFrag heroesList;
@@ -73,13 +71,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     }
 
     public void showNewFragment(MenuItem menuItem) {
-        // Create a new fragment and specify the fragment to show based on nav item clicked
+        // chaque nouveau fragment est obligatoirement un recyclerfrag dans cette methode
+        ControllerAPI response  = new ControllerAPI(this, sharedPreferences);
         String fragTag = "";
         int fragSearchOptions = 0;
+        // initialisation du fragment desire
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                // initialisation du fragment de la liste des heros
-                //initHeroList();
                 fragTag = heroesListTag;
                 fragSearchOptions = R.string.frag_search_abilities;
                 break;
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         fragmentCalled = (RecyclerFrag) manager.findFragmentByTag(fragTag);
         if (fragmentCalled == null) {
             // instanciation du fragment
-            ControllerAPI response  = new ControllerAPI(this, sharedPreferences, fragTag);
+            response.dataName = fragTag;
             response.start();
             fragmentCalled = new RecyclerFrag();
             fragmentCalled.fragSearchTag = getResources().getString(fragSearchOptions);
