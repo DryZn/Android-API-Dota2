@@ -8,6 +8,10 @@ Le code est fait de manière à être le plus possible facile à réutiliser dan
 
 Les MDC utilisés sont un Toolbar, un NavigationView et un MenuItem.
 
+Les données sont stockées en cache et tout fonctionne avec des fragments, le mainActivity les ajoute/enlève.
+
+La barre de filtres du fragment contenant un recyclerview est lui un fragment fils de celui-ci.
+
 # Aperçu
 
 <img src="https://image.noelshack.com/fichiers/2019/52/2/1577142005-screenshot-20191223-235749.jpg" width="40%">
