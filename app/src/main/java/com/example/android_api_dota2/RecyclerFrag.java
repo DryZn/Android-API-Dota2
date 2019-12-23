@@ -16,9 +16,8 @@ import java.util.List;
 // Fragment qui permet de contenir une liste RecyclerView mais son initialistation se fait dans le mainActivity
 public class RecyclerFrag extends Fragment implements SearchOptionsCB{
     protected RecyclerView list_items;
-    protected List<Heroes> data;
-    protected List<Heroes> dataFiltered;
     protected RecyclerView.Adapter adaptater;
+    protected List<?> data;
     boolean firstCall = true;
     private RecyclerFragCB parent;
     protected String fragSearchTag;
@@ -39,8 +38,10 @@ public class RecyclerFrag extends Fragment implements SearchOptionsCB{
             SearchAbilities  searchFrag = (SearchAbilities) manager.findFragmentByTag(fragSearchTag);
             if (searchFrag == null) {
                 searchFrag = new SearchAbilities();
-
                 manager.beginTransaction().add(R.id.search_options, searchFrag, fragSearchTag).commit();
+            } else {
+                manager.popBackStackImmediate(fragSearchTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                manager.beginTransaction().show(searchFrag).commit();
             }
         }
         return view;
@@ -69,13 +70,16 @@ public class RecyclerFrag extends Fragment implements SearchOptionsCB{
     // lorsque l'on change les filtres de recherche
     @Override
     public void filterData(String sortType) {
-        //List<Heroes> data = Arrays.asList(((HerosAdapter) adaptater).getmDataset());
-        if (data != null) {
-            if (dataFiltered == null) dataFiltered = data;
+        try {
+            List<Heroes> data = (List<Heroes>) this.data;
+            //List<Heroes> data = Arrays.asList(((HerosAdapter) adaptater).mDataset);
+            /*if ((dataFiltered == null) || (dataFiltered.size() == 0))
+                dataFiltered = new ArrayList<>(data);
+            dataFiltered = ControllerAPI.filterArray(data, dataFiltered, sortType, getResources());*/
             // cette ligne represente beaucoup d'efforts elle aussi
-            dataFiltered = ControllerAPI.filterArray(data, dataFiltered, sortType, getResources());
-            adaptater = new HerosAdapter(this, dataFiltered);
+            data = ControllerAPI.filterArray(data, sortType, getResources());
+            adaptater = new HerosAdapter(this, data);
             list_items.setAdapter(adaptater);
-        }
+        } catch (Exception e) {}
     }
 }

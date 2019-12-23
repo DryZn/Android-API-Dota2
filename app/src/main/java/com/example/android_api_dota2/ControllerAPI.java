@@ -55,9 +55,9 @@ public class ControllerAPI implements Callback<List<Heroes>>{
             // tri des donnees recues
             List<Heroes> heroesSortedList = (List<Heroes>) sortArray(heroesList, "");
             // utiliser interface ici
-            view.heroesList.data = heroesList;
-            view.heroesList.adaptater = new HerosAdapter(view.heroesList, heroesSortedList);
-            view.heroesList.list_items.swapAdapter(view.heroesList.adaptater, false);
+            view.fragmentCalled.data = heroesList;
+            view.fragmentCalled.adaptater = new HerosAdapter(view.fragmentCalled, heroesSortedList);
+            view.fragmentCalled.list_items.swapAdapter(view.fragmentCalled.adaptater, false);
             // mise en cache des nouvelles donnees
             save(heroesSortedList);
         } else {
@@ -123,24 +123,22 @@ public class ControllerAPI implements Callback<List<Heroes>>{
     }
 
     // fonction qui retourne en tableau filtre selon les parametres
-    protected static List<Heroes> filterArray(List<Heroes> heroesList, List<Heroes> heroesFilteredList, String filter, Resources resources) {
+    protected static List<Heroes> filterArray(List<Heroes> heroesList, String filter, Resources resources) {
         // on ne traite pas les valeurs par defaut
         if (filter.equals(resources.getStringArray(R.array.roles)[0])) return heroesList;
         else if (filter.equals(resources.getStringArray(R.array.attack_types)[0])) return heroesList;
 
         List<Heroes> filteredArray = new ArrayList<>();
-        for (Heroes hero : heroesFilteredList) {
+        // for (Heroes hero : heroesFilteredList) {
+        for (Heroes hero : heroesList) {
             // on fait du cas par cas
             if (hero.getAttackType().equals(filter)) {
                 filteredArray.add(hero);
-                System.out.println(filter);
-                System.out.println(hero.getAttackType());
             } else if (hero.getRoles().contains(filter))
                 filteredArray.add(hero);
             else if (hero.getAttribute().equals(filter))
                 filteredArray.add(hero);
         }
-
         return filteredArray;
     }
 }

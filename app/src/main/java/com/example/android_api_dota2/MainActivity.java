@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private ActionBarDrawerToggle drawerToggle;
     private SharedPreferences sharedPreferences;
     private String heroesListTag;
+    protected RecyclerFrag fragmentCalled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,50 +74,42 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
 
     public void showNewFragment(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment = null;
-        Class fragmentClass;
+        String fragTag = "";
+        int fragSearchOptions = 0;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
                 // initialisation du fragment de la liste des heros
-                initHeroList();
+                //initHeroList();
+                fragTag = heroesListTag;
+                fragSearchOptions = R.string.frag_search_abilities;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = RecyclerFrag.class;
+                //fragmentClass = RecyclerFrag.class;
                 break;
             case R.id.nav_third_fragment:
-                fragmentClass = RecyclerFrag.class;
+                //initHeroList();
                 break;
-            default:
-                fragmentClass = RecyclerFrag.class;
         }
 
-        /*
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {e.printStackTrace();}
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.heroes_content, fragment).commit();*/
-
+        // regarder si le fragment est deja charge en memoire
+        fragmentCalled = (RecyclerFrag) manager.findFragmentByTag(fragTag);
+        if (fragmentCalled == null) {
+            // instanciation du fragment
+            ControllerAPI response  = new ControllerAPI(this, sharedPreferences, fragTag);
+            response.start();
+            fragmentCalled = new RecyclerFrag();
+            fragmentCalled.fragSearchTag = getResources().getString(fragSearchOptions);
+            manager.beginTransaction().add(R.id.heroes_content, fragmentCalled, fragTag).commit();
+        } else {
+            // restauration du fragment
+            manager.popBackStackImmediate(fragTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            manager.beginTransaction().show(fragmentCalled).commit();
+        }
         // Highlight the selected item has been done by NavigationView and Set action bar title
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
         // Close the navigation drawer
         mDrawer.closeDrawers();
-    }
-
-    protected void initHeroList() {
-        // regarder si le fragment est deja charge en memoire
-        heroesList = (RecyclerFrag) manager.findFragmentByTag(heroesListTag);
-        if (heroesList == null) {
-            ControllerAPI response  = new ControllerAPI(this, sharedPreferences, heroesListTag);
-            response.start();
-            heroesList = new RecyclerFrag();
-            heroesList.fragSearchTag = getResources().getString(R.string.frag_search_abilities);
-            manager.beginTransaction().add(R.id.heroes_content, heroesList, heroesListTag).commit();
-        } else {
-            manager.popBackStackImmediate(heroesListTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            manager.beginTransaction().show(heroesList).commit();
-        }
     }
 
     // callback du recyclerview de recyclerfrag pour voir ses details

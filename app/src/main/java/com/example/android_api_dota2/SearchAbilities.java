@@ -8,12 +8,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 // Fragment qui permet d'afficher les options de recherches des heros concernant leurs competences
 public class SearchAbilities extends Fragment implements AdapterView.OnItemSelectedListener {
-    SearchOptionsCB parentFrag;
+    private SearchOptionsCB parentFrag;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class SearchAbilities extends Fragment implements AdapterView.OnItemSelec
         // actualisation de la vue du spinner
         parent.setSelection(pos);
         // envoi du filtre selectionne
+        System.out.println(parent.getSelectedItem().toString());
         parentFrag.filterData(parent.getSelectedItem().toString());
     }
 
