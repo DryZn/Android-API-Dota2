@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private NavigationView navbar;
     private ActionBarDrawerToggle drawerToggle;
     private SharedPreferences sharedPreferences;
+    private String heroesListTag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         // initialisation si necessaire
         if (savedInstanceState == null) {
             setContentView(R.layout.activity_main);
+            // initialisation des tags
+            heroesListTag = getResources().getString(R.string.frag_hero_list_tag);
             // pour les appels a l'api
             sharedPreferences = getBaseContext().getSharedPreferences("DotaAppli", MODE_PRIVATE);
             // pour la gestion des fragments
@@ -103,25 +106,29 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
 
     protected void initHeroList() {
         // regarder si le fragment est deja charge en memoire
-        heroesList = (RecyclerFrag) manager.findFragmentByTag("herolist");
+        heroesList = (RecyclerFrag) manager.findFragmentByTag(heroesListTag);
         if (heroesList == null) {
-            ControllerAPI response  = new ControllerAPI(this, sharedPreferences, "HeroesData");
+            ControllerAPI response  = new ControllerAPI(this, sharedPreferences, heroesListTag);
             response.start();
             heroesList = new RecyclerFrag();
-            manager.beginTransaction().add(R.id.heroes_content, heroesList, "herolist").commit();
+            manager.beginTransaction().add(R.id.heroes_content, heroesList, heroesListTag).commit();
         } else {
-            manager.popBackStackImmediate("herolist", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            manager.popBackStackImmediate(heroesListTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             manager.beginTransaction().show(heroesList).commit();
         }
     }
 
+    // callback du recyclerview de recyclerfrag pour voir ses details
     @Override
     public void watchDetails(Object hero) {
-        PictureHero details = new PictureHero();
-        details.hero = (Heroes) hero;
-        // mise en backstack du fragment actuel avant de le remplacer par la vue en details
-        manager.beginTransaction().replace(R.id.heroes_content, details)
-                .addToBackStack("herolist").commit();
+        switch (hero.getClass().getSimpleName()) {
+            case "Heroes":
+                PictureHero details = new PictureHero();
+                details.hero = (Heroes) hero;
+                // mise en backstack du fragment actuel avant de le remplacer par la vue en details
+                manager.beginTransaction().replace(R.id.heroes_content, details)
+                        .addToBackStack(heroesListTag).commit();
+        }
     }
 
     @Override

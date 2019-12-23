@@ -1,6 +1,7 @@
 package com.example.android_api_dota2;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -52,7 +53,9 @@ public class ControllerAPI implements Callback<List<Heroes>>{
             System.out.println(response.headers());
             List<Heroes> heroesList = response.body();
             // tri des donnees recues
-            List<Heroes> heroesSortedList = sortArray(heroesList, "");
+            List<Heroes> heroesSortedList = (List<Heroes>) sortArray(heroesList, "");
+            // utiliser interface ici
+            view.heroesList.data = heroesList;
             view.heroesList.adaptater = new HerosAdapter(view.heroesList, heroesSortedList);
             view.heroesList.list_items.swapAdapter(view.heroesList.adaptater, false);
             // mise en cache des nouvelles donnees
@@ -88,10 +91,9 @@ public class ControllerAPI implements Callback<List<Heroes>>{
     }
 
     // fonction pour trier les heros en fonction du parametre donne
-    protected List<Heroes> sortArray(List<Heroes> heroesList, String sortType) {
+    protected static List<?> sortArray(List<Heroes> heroesList, String sortType) {
         List<Heroes> heroesSortedList = new ArrayList<>();
         boolean replaced;
-
         for (Heroes heroe : heroesList){
             replaced = false;
             for (Heroes heroeComp : heroesSortedList) {
@@ -110,6 +112,7 @@ public class ControllerAPI implements Callback<List<Heroes>>{
                                     break;
                             }
                         }
+                        break;
                 }
                 if (replaced) break;
             }
@@ -117,5 +120,27 @@ public class ControllerAPI implements Callback<List<Heroes>>{
             if (!replaced) heroesSortedList.add(heroesSortedList.size(), heroe);
         }
         return heroesSortedList;
+    }
+
+    // fonction qui retourne en tableau filtre selon les parametres
+    protected static List<Heroes> filterArray(List<Heroes> heroesList, String filter, Resources resources) {
+        // on ne traite pas les valeurs par defaut
+        if (filter.equals(resources.getStringArray(R.array.roles)[0])) return heroesList;
+        else if (filter.equals(resources.getStringArray(R.array.attack_types)[0])) return heroesList;
+
+        List<Heroes> filteredArray = new ArrayList<>();
+        for (Heroes hero : heroesList) {
+            // on fait du cas par cas
+            if (hero.getAttackType().equals(filter)) {
+                filteredArray.add(hero);
+                System.out.println(filter);
+                System.out.println(hero.getAttackType());
+            } else if (hero.getRoles().contains(filter))
+                filteredArray.add(hero);
+            else if (hero.getAttribute().equals(filter))
+                filteredArray.add(hero);
+        }
+
+        return filteredArray;
     }
 }

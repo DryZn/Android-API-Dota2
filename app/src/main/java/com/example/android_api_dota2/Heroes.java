@@ -26,4 +26,18 @@ public class Heroes {
             strRoles += role + " ";
         return strRoles;
     }
+
+    // Attribut principal des heros
+    public String getAttribute() {
+        String pattr = "";
+        switch (primary_attr) {
+            case "agi":
+                pattr = "Agilité";
+            case "str":
+                pattr = "Force";
+            case "int":
+                pattr = "Intelligence";
+        }
+        return pattr;
+    }
 }

@@ -11,9 +11,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Arrays;
+import java.util.List;
+
 // Fragment qui permet de contenir une liste RecyclerView mais son initialistation se fait dans le mainActivity
-public class RecyclerFrag extends Fragment {
+public class RecyclerFrag extends Fragment implements SearchOptionsCB{
     protected RecyclerView list_items;
+    protected List<Heroes> data;
     protected RecyclerView.Adapter adaptater;
     boolean firstCall = true;
     private RecyclerFragCB parent;
@@ -53,5 +57,16 @@ public class RecyclerFrag extends Fragment {
 
     protected void watchDetails(Object hero) {
         parent.watchDetails(hero);
+    }
+
+    // lorsque l'on change les filtres de recherche
+    @Override
+    public void filterData(String sortType) {
+        if (data != null) {
+            // cette ligne represente beaucoup d'efforts elle aussi
+            List<Heroes> newDisplayData = ControllerAPI.filterArray(data, sortType, getResources());
+            adaptater = new HerosAdapter(this, newDisplayData);
+            list_items.setAdapter(adaptater);
+        }
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class HerosAdapter extends RecyclerView.Adapter<HerosAdapter.ViewHolder>{
     private RecyclerFrag vmain;
-    private Heroes[] mDataset;
+    protected Heroes[] mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
