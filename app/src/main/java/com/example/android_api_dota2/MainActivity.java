@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
             ControllerAPI response  = new ControllerAPI(this, sharedPreferences, heroesListTag);
             response.start();
             heroesList = new RecyclerFrag();
+            heroesList.fragSearchTag = getResources().getString(R.string.frag_search_abilities);
             manager.beginTransaction().add(R.id.heroes_content, heroesList, heroesListTag).commit();
         } else {
             manager.popBackStackImmediate(heroesListTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);

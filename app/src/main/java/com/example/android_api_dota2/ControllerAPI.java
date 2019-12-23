@@ -123,13 +123,13 @@ public class ControllerAPI implements Callback<List<Heroes>>{
     }
 
     // fonction qui retourne en tableau filtre selon les parametres
-    protected static List<Heroes> filterArray(List<Heroes> heroesList, String filter, Resources resources) {
+    protected static List<Heroes> filterArray(List<Heroes> heroesList, List<Heroes> heroesFilteredList, String filter, Resources resources) {
         // on ne traite pas les valeurs par defaut
         if (filter.equals(resources.getStringArray(R.array.roles)[0])) return heroesList;
         else if (filter.equals(resources.getStringArray(R.array.attack_types)[0])) return heroesList;
 
         List<Heroes> filteredArray = new ArrayList<>();
-        for (Heroes hero : heroesList) {
+        for (Heroes hero : heroesFilteredList) {
             // on fait du cas par cas
             if (hero.getAttackType().equals(filter)) {
                 filteredArray.add(hero);

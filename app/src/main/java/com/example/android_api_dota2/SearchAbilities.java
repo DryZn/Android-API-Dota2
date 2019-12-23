@@ -17,8 +17,8 @@ public class SearchAbilities extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // chargement des donnees du xml associe
         View view = inflater.inflate(R.layout.so_heroes_abilities, container, false);
+        // Instanciation de trois spinners
         Spinner list_roles = view.findViewById(R.id.list_roles);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -28,15 +28,18 @@ public class SearchAbilities extends Fragment implements AdapterView.OnItemSelec
         // Apply the adapter to the spinner
         list_roles.setAdapter(adapter);
         list_roles.setOnItemSelectedListener(this);
+
         Spinner list_attackType = view.findViewById(R.id.list_attackType);
-        ArrayAdapter<CharSequence>  adapterSec = ArrayAdapter.createFromResource(getActivity(), R.array.attack_types, R.layout.spinner_item);
-        adapterSec.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        list_attackType.setAdapter(adapterSec);
+        adapter = ArrayAdapter.createFromResource(getActivity(), R.array.attack_types, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        list_attackType.setAdapter(adapter);
+        list_attackType.setOnItemSelectedListener(this);
 
         Spinner list_attributes = view.findViewById(R.id.list_attributes);
         ArrayAdapter<CharSequence>  adapterThird = ArrayAdapter.createFromResource(getActivity(), R.array.attack_types, R.layout.spinner_item);
         adapterThird.setDropDownViewResource(R.layout.spinner_dropdown_item);
         list_attributes.setAdapter(adapterThird);
+        list_attributes.setOnItemSelectedListener(this);
         return view;
     }
 
