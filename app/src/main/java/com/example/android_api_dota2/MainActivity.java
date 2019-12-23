@@ -3,10 +3,7 @@ package com.example.android_api_dota2;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -93,9 +90,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
         /*
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {e.printStackTrace();}
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.heroes_content, fragment).commit();*/
 
@@ -113,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
             ControllerAPI response  = new ControllerAPI(this, sharedPreferences, "HeroesData");
             response.start();
             heroesList = new RecyclerFrag();
-            heroesList.layout = R.layout.recycler_fragment;
             manager.beginTransaction().add(R.id.heroes_content, heroesList, "herolist").commit();
         } else {
             manager.popBackStackImmediate("herolist", FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -122,9 +116,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     }
 
     @Override
-    public void watchDetails(Heroes hero) {
+    public void watchDetails(Object hero) {
         PictureHero details = new PictureHero();
-        details.hero = hero;
+        details.hero = (Heroes) hero;
         // mise en backstack du fragment actuel avant de le remplacer par la vue en details
         manager.beginTransaction().replace(R.id.heroes_content, details)
                 .addToBackStack("herolist").commit();

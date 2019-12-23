@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 // Fragment qui permet de contenir une liste RecyclerView mais son initialistation se fait dans le mainActivity
 public class RecyclerFrag extends Fragment {
-    protected int layout;
     protected RecyclerView list_items;
     protected RecyclerView.Adapter adaptater;
     boolean firstCall = true;
@@ -21,13 +21,17 @@ public class RecyclerFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // chargement des donnees du xml associe
-        View view = inflater.inflate(layout, container, false);
-        // initialisation du recyclerview
+        View view = inflater.inflate(R.layout.recycler_fragment, container, false);
+        // initialisation du recyclerview avec un adaptateur vide avant que l'on ne recoive les donnees
         list_items = view.findViewById(R.id.list_heroes);
         list_items.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         list_items.setLayoutManager(layoutManager);
         list_items.setAdapter(null);
+        // initialisation du fragment de recherche
+        SearchAbilities searchFrag = new SearchAbilities();
+        FragmentManager manager = getChildFragmentManager();
+        manager.beginTransaction().add(R.id.search_options, searchFrag, "searchFrag").commit();
         return view;
     }
 
@@ -47,7 +51,7 @@ public class RecyclerFrag extends Fragment {
         parent = (RecyclerFragCB) getActivity();
     }
 
-    protected void watchDetails(Heroes hero) {
+    protected void watchDetails(Object hero) {
         parent.watchDetails(hero);
     }
 }

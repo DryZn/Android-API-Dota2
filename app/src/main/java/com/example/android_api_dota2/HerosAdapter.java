@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 
-public class HerosAdapter extends RecyclerView.Adapter<HerosAdapter.ViewHolder> {
+public class HerosAdapter extends RecyclerView.Adapter<HerosAdapter.ViewHolder>{
     private RecyclerFrag vmain;
     private Heroes[] mDataset;
 
@@ -45,9 +45,7 @@ public class HerosAdapter extends RecyclerView.Adapter<HerosAdapter.ViewHolder> 
     // Provide a suitable constructor (depends on the kind of dataset)
     public HerosAdapter(RecyclerFrag vmain, List<Heroes> myDataset){
         this.vmain = vmain;
-        try {
-            mDataset = myDataset.toArray(new Heroes[0]);
-        } catch (Exception e) {}
+        mDataset = myDataset.toArray(new Heroes[0]);
     }
 
     // Create new views (invoked by the layout manager)

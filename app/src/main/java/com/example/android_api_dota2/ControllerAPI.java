@@ -20,7 +20,7 @@ public class ControllerAPI implements Callback<List<Heroes>>{
     static final String BASE_URL = "https://api.opendota.com/api/";
     private MainActivity view;
     private SharedPreferences sharedPreferences;
-    String dataName;
+    private String dataName;
 
     public ControllerAPI(MainActivity view, SharedPreferences sharedPreferences, String dataName) {
         this.view = view;
