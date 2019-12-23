@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="CustomAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="CustomAppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <!-- couleurs qui interviennent pour le theme de l'appli -->
         <item name="colorPrimaryDark">@color/cardview_dark_background</item>
@@ -12,8 +12,8 @@
     <style name="SpinnerBar">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:textSize">15dp</item>
     </style>
 
     <style name="CustomDropDownSpinner" parent="@android:style/Widget.Holo.DropDownItem.Spinner">

@@ -17,63 +17,99 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ControllerAPI implements Callback<List<Heroes>>{
+public class ControllerAPI {
     static final String BASE_URL = "https://api.opendota.com/api/";
     private MainActivity view;
     private SharedPreferences sharedPreferences;
-    protected String dataName;
+    private int dataNameID;
+    private String dataName;
+    protected String searchedData;
 
-    public ControllerAPI(MainActivity view, SharedPreferences sharedPreferences) {
+    public ControllerAPI(MainActivity view, SharedPreferences sharedPreferences, int dataNameID) {
         this.view = view;
         this.sharedPreferences = sharedPreferences;
+        this.dataNameID = dataNameID;
     }
 
+    // on recharge si possible les donnees ici
     public void start() {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
+        // preparation de la reception d'une reponse get
+        Gson gson = new GsonBuilder().setLenient().create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         DotaAPI dotaAPI = retrofit.create(DotaAPI.class);
+        dataName = view.getResources().getString(dataNameID);
 
-        Call<List<Heroes>> call = dotaAPI.getHeroes();
-        call.enqueue(this);
+        switch (dataNameID) {
+            case R.string.frag_hero_list_tag:
+                lauchHeroesRequest(dotaAPI);
+                break;
+            case R.string.frag_community_tag:
+                lauchCommunityRequest(dotaAPI);
+                break;
 
-    }
-
-    @Override
-    public void onResponse(Call<List<Heroes>> call, Response<List<Heroes>> response) {
-        if(response.isSuccessful()) {
-            System.out.println("ici ");
-            System.out.println(response.headers());
-            List<Heroes> heroesList = response.body();
-            // tri des donnees recues
-            List<Heroes> heroesSortedList = (List<Heroes>) sortArray(heroesList, "");
-            // utiliser interface ici
-            view.fragmentCalled.data = heroesList;
-            view.fragmentCalled.adaptater = new HerosAdapter(view.fragmentCalled, heroesSortedList);
-            view.fragmentCalled.list_items.swapAdapter(view.fragmentCalled.adaptater, false);
-            // mise en cache des nouvelles donnees
-            save(heroesSortedList);
-        } else {
-            System.out.println(response.errorBody());
         }
     }
 
-    @Override
-    public void onFailure(Call<List<Heroes>> call, Throwable t) {
-        t.printStackTrace();
-        //Au cas ou le telephone n est pas encore connecte a internet, on recharge la memoire en cache
-        List<Heroes> savedList = getSave();
-        view.heroesList.adaptater = new HerosAdapter(view.heroesList, savedList);
-        view.heroesList.list_items.swapAdapter(view.heroesList.adaptater, false);
+    private void lauchCommunityRequest(DotaAPI dotaAPI) {
+        Call<List<Users>> call = dotaAPI.userSearch(searchedData);
+        call.enqueue(new Callback<List<Users>>() {
+            @Override
+            public void onResponse(Call<List<Users>> call, Response<List<Users>> response) {
+                List<Users> heroesList = response.body();
+                // tri des donnees recues
+                //List<Users> heroesSortedList = (List<Heroes>) sortArray(heroesList, "");
+                save(heroesList);
+                //initFragData(heroesSortedList);
+                if(response.isSuccessful()) {
+                    // mise en cache des nouvelles donnees
+                } else {
+                    System.out.println(response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Users>> call, Throwable t) {
+                t.printStackTrace();
+                //Au cas ou le telephone n est pas encore connecte a internet, on recharge la memoire en cache
+                List<Users> savedList = (List<Users>) getSave();
+                //initFragData(savedList);
+            }
+        });
     }
 
-    private void save(List<Heroes> changesList) {
+        private void lauchHeroesRequest(DotaAPI dotaAPI) {
+        Call<List<Heroes>> call = dotaAPI.getHeroes();
+        call.enqueue(new Callback<List<Heroes>>() {
+            @Override
+            public void onResponse(Call<List<Heroes>> call, Response<List<Heroes>> response) {
+                List<Heroes> heroesList = response.body();
+                // tri des donnees recues
+                List<Heroes> heroesSortedList = (List<Heroes>) sortArray(heroesList, "");
+                save(heroesSortedList);
+                // association de l'adatpeur contenant les donnees au recyclerview
+                view.updateRecyclerFrag(heroesSortedList);
+                if(response.isSuccessful()) {
+                    // mise en cache des nouvelles donnees
+                } else {
+                    System.out.println(response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Heroes>> call, Throwable t) {
+                t.printStackTrace();
+                //Au cas ou le telephone n est pas encore connecte a internet, on recharge la memoire en cache
+                List<Heroes> savedList = (List<Heroes>) getSave();
+                view.updateRecyclerFrag(savedList);
+            }
+        });
+    }
+
+    private void save(List<?> changesList) {
         String changesListString = new Gson().toJson(changesList);
         sharedPreferences
                 .edit()
@@ -82,10 +118,10 @@ public class ControllerAPI implements Callback<List<Heroes>>{
 
     }
 
-    private List<Heroes> getSave() {
+    private List<?> getSave() {
         String changesListString = sharedPreferences.getString(dataName, "");
-        Type changeListType = new TypeToken<List<Heroes>>(){}.getType();
-        List<Heroes> changesList = new Gson().fromJson(changesListString, changeListType);
+        Type changeListType = new TypeToken<List<?>>(){}.getType();
+        List<?> changesList = new Gson().fromJson(changesListString, changeListType);
         return changesList;
     }
 

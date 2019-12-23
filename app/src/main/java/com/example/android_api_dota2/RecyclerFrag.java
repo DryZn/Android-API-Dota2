@@ -20,7 +20,7 @@ public class RecyclerFrag extends Fragment implements SearchOptionsCB{
     protected List<?> data;
     boolean firstCall = true;
     private RecyclerFragCB parent;
-    protected String fragSearchTag;
+    protected int fragSearchTagID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,18 +34,32 @@ public class RecyclerFrag extends Fragment implements SearchOptionsCB{
             list_items.setLayoutManager(layoutManager);
             list_items.setAdapter(null);
             // initialisation du fragment de recherche
-            FragmentManager manager = getChildFragmentManager();
-            SearchAbilities  searchFrag = (SearchAbilities) manager.findFragmentByTag(fragSearchTag);
-            if (searchFrag == null) {
-                searchFrag = new SearchAbilities();
-                manager.beginTransaction().add(R.id.search_options, searchFrag, fragSearchTag).commit();
-            } else {
-                manager.popBackStackImmediate(fragSearchTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                manager.beginTransaction().show(searchFrag).commit();
-            }
+            initSearchFrag();
         }
         return view;
     }
+
+    private void initSearchFrag() {
+        String fragSearchTag = getResources().getString(fragSearchTagID);
+        FragmentManager manager = getChildFragmentManager();
+        Fragment  searchFrag = manager.findFragmentByTag(fragSearchTag);
+        if (searchFrag == null) {
+            // l'identifier de fragment d'options de recherches sert a cela
+            switch (fragSearchTagID) {
+                case R.string.frag_search_abilities:
+                    searchFrag = new SearchAbilities();
+                    break;
+                case R.string.frag_search_community:
+                    System.out.println("okay");
+                    searchFrag = new SearchCommunity();
+                    break;
+            }
+            manager.beginTransaction().add(R.id.search_options, searchFrag, fragSearchTag).commit();
+        } else {
+            manager.popBackStackImmediate(fragSearchTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            manager.beginTransaction().show(searchFrag).commit();
+    }
+}
 
     // l'adaptateur se detache lorsque l'on met en backstack le fragment
     @Override
@@ -63,8 +77,8 @@ public class RecyclerFrag extends Fragment implements SearchOptionsCB{
         parent = (RecyclerFragCB) getActivity();
     }
 
-    protected void watchDetails(Object hero) {
-        parent.watchDetails(hero);
+    protected void watchDetails(Object object) {
+        parent.watchDetails(object);
     }
 
     // lorsque l'on change les filtres de recherche

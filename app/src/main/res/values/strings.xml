@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Dota2 API</string>
     <string name="frag_hero_list_tag">hero_list</string>
-    <string name="frag_search_abilities">searchFrag</string>
+    <string name="frag_community_tag">hero_list</string>
+    <string name="frag_search_abilities">Abilities</string>
+    <string name="frag_search_community">Community</string>
     <string name="menu_fist">Héros</string>
-    <string name="menu_second">Equipes</string>
-    <string name="menu_third">Communauté</string>
+    <string name="menu_second">Communauté</string>
     <string name="search">Rechercher...</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

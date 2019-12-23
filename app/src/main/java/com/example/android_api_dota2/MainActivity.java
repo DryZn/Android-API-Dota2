@@ -13,6 +13,9 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.sql.Array;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private FragmentManager manager;
     protected RecyclerFrag heroesList;
@@ -21,17 +24,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private NavigationView navbar;
     private ActionBarDrawerToggle drawerToggle;
     private SharedPreferences sharedPreferences;
-    private String heroesListTag;
-    protected RecyclerFrag fragmentCalled;
+    protected RecyclerFrag[] fragmentsCalled;
+    private int currentFrag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // initialisation si necessaire
         if (savedInstanceState == null) {
-            setContentView(R.layout.activity_main);
-            // initialisation des tags
-            heroesListTag = getResources().getString(R.string.frag_hero_list_tag);
             // pour les appels a l'api
             sharedPreferences = getBaseContext().getSharedPreferences("DotaAppli", MODE_PRIVATE);
             // pour la gestion des fragments
@@ -51,10 +51,17 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
             // initialisation du navbar et lancement du fragment voulu
             navbar = findViewById(R.id.navbar);
             initNavbarContent(navbar);
-            showNewFragment(navbar.getMenu().getItem(0));
+            setContentView(R.layout.activity_main);
+            fragmentsCalled = new RecyclerFrag[navbar.getMenu().size()];
+            currentFrag = 0;
+            showNewFragment(R.id.nav_first_fragment);
         } else {
             // affichage des fragments deja visibles
-            try{heroesList.isVisible();} catch (Exception e){}
+            for (int i = 0; i < fragmentsCalled.length; i++) {
+                try {
+                    fragmentsCalled[i].isVisible();
+                } catch (Exception e) {}
+            }
         }
     }
 
@@ -64,62 +71,86 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        showNewFragment(menuItem);
+                        handleMenuItemSelection(menuItem);
                         return true;
                     }
                 });
     }
 
-    public void showNewFragment(MenuItem menuItem) {
-        // chaque nouveau fragment est obligatoirement un recyclerfrag dans cette methode
-        ControllerAPI response  = new ControllerAPI(this, sharedPreferences);
-        String fragTag = "";
-        int fragSearchOptions = 0;
-        // initialisation du fragment desire
-        switch(menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
-                fragTag = heroesListTag;
-                fragSearchOptions = R.string.frag_search_abilities;
-                break;
-            case R.id.nav_second_fragment:
-                //fragmentClass = RecyclerFrag.class;
-                break;
-            case R.id.nav_third_fragment:
-                //initHeroList();
-                break;
-        }
-
-        // regarder si le fragment est deja charge en memoire
-        fragmentCalled = (RecyclerFrag) manager.findFragmentByTag(fragTag);
-        if (fragmentCalled == null) {
-            // instanciation du fragment
-            response.dataName = fragTag;
-            response.start();
-            fragmentCalled = new RecyclerFrag();
-            fragmentCalled.fragSearchTag = getResources().getString(fragSearchOptions);
-            manager.beginTransaction().add(R.id.heroes_content, fragmentCalled, fragTag).commit();
-        } else {
-            // restauration du fragment
-            manager.popBackStackImmediate(fragTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            manager.beginTransaction().show(fragmentCalled).commit();
-        }
+    // selon le type du parametre on va faire un appel a l'api ou plus
+    public void handleMenuItemSelection(MenuItem menuItem) {
         // Highlight the selected item has been done by NavigationView and Set action bar title
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
+        showNewFragment(menuItem.getItemId());
         // Close the navigation drawer
         mDrawer.closeDrawers();
     }
 
+    public void showNewFragment(int idFragment) {
+        // chaque nouveau fragment est obligatoirement un recyclerfrag dans cette methode
+        int fragTagID = 0;
+        int fragIdentifier = 0;
+        int fragSearchOptions = 0;
+        boolean requestReady = true;
+        // initialisation du fragment desire en se basant sur les donnees de string.xml
+        switch(idFragment) {
+            case R.id.nav_first_fragment:
+                fragTagID = R.string.frag_hero_list_tag;
+                fragSearchOptions = R.string.frag_search_abilities;
+                fragIdentifier = R.id.heroes_content;
+                break;
+            case R.id.nav_second_fragment:
+                fragTagID = R.string.frag_community_tag;
+                fragSearchOptions = R.string.frag_search_community;
+                fragIdentifier = R.id.community_content;
+                // specifier lorsque le fragment choisi ne doit pas encore lancer d'appel api ici
+                requestReady = false;
+                break;
+        }
+
+        // regarder si le fragment est deja charge en memoire
+        String fragTag = getResources().getString(fragTagID);
+        System.out.println(fragmentsCalled[currentFrag]);
+        fragmentsCalled[currentFrag] = (RecyclerFrag) manager.findFragmentByTag(fragTag);
+        if (fragmentsCalled[currentFrag] == null) {
+            // instanciation du fragment
+            fragmentsCalled[currentFrag] = new RecyclerFrag();
+            System.out.println(fragmentsCalled[currentFrag]);
+            fragmentsCalled[currentFrag].fragSearchTagID = fragSearchOptions;
+            manager.beginTransaction().replace(fragIdentifier, fragmentsCalled[currentFrag], fragTag).commit();
+        } else {
+            // restauration du fragment
+            manager.popBackStackImmediate(fragTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            manager.beginTransaction().show(fragmentsCalled[currentFrag]).commit();
+        }
+        if (requestReady) launchResponse(fragTagID, "");
+        currentFrag += 1;
+    }
+
+    protected void launchResponse(int fragTagID, String searchedData){
+        ControllerAPI response = new ControllerAPI(this, sharedPreferences, fragTagID);
+        response.searchedData = searchedData;
+        response.start();
+    }
+
+    protected void updateRecyclerFrag (List<Heroes> heroesSortedList) {
+        fragmentsCalled[currentFrag].data = heroesSortedList;
+        fragmentsCalled[currentFrag].adaptater = new HerosAdapter(fragmentsCalled[currentFrag], heroesSortedList);
+        fragmentsCalled[currentFrag].list_items.swapAdapter(fragmentsCalled[currentFrag].adaptater, false);
+        fragmentsCalled[currentFrag] = null;
+    }
+
     // callback du recyclerview de recyclerfrag pour voir ses details
     @Override
-    public void watchDetails(Object hero) {
-        switch (hero.getClass().getSimpleName()) {
+    public void watchDetails(Object object) {
+        switch (object.getClass().getSimpleName()) {
             case "Heroes":
                 PictureHero details = new PictureHero();
-                details.hero = (Heroes) hero;
+                details.hero = (Heroes) object;
                 // mise en backstack du fragment actuel avant de le remplacer par la vue en details
                 manager.beginTransaction().replace(R.id.heroes_content, details)
-                        .addToBackStack(heroesListTag).commit();
+                        .addToBackStack(getResources().getString(R.string.frag_hero_list_tag)).commit();
         }
     }
 
