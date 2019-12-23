@@ -1,7 +1,8 @@
 <resources>
 
+    <style name="WindowActionBar">true</style>
     <!-- Base application theme. -->
-    <style name="CustomAppTheme" parent="Theme.AppCompat.Light">
+    <style name="CustomAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <!-- couleurs qui interviennent pour le theme de l'appli -->
         <item name="colorPrimaryDark">@color/cardview_dark_background</item>

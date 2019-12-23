@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.sql.Array;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
@@ -24,14 +23,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     private NavigationView navbar;
     private ActionBarDrawerToggle drawerToggle;
     private SharedPreferences sharedPreferences;
-    protected RecyclerFrag[] fragmentsCalled;
-    private int currentFrag;
+    protected RecyclerFrag fragmentCalled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // initialisation si necessaire
         if (savedInstanceState == null) {
+            setContentView(R.layout.activity_main);
             // pour les appels a l'api
             sharedPreferences = getBaseContext().getSharedPreferences("DotaAppli", MODE_PRIVATE);
             // pour la gestion des fragments
@@ -51,17 +50,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
             // initialisation du navbar et lancement du fragment voulu
             navbar = findViewById(R.id.navbar);
             initNavbarContent(navbar);
-            setContentView(R.layout.activity_main);
-            fragmentsCalled = new RecyclerFrag[navbar.getMenu().size()];
-            currentFrag = 0;
             showNewFragment(R.id.nav_first_fragment);
+            //navbar.getMenu().size();
         } else {
             // affichage des fragments deja visibles
-            for (int i = 0; i < fragmentsCalled.length; i++) {
-                try {
-                    fragmentsCalled[i].isVisible();
-                } catch (Exception e) {}
-            }
+            try{heroesList.isVisible();} catch (Exception e){}
         }
     }
 
@@ -111,21 +104,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
 
         // regarder si le fragment est deja charge en memoire
         String fragTag = getResources().getString(fragTagID);
-        System.out.println(fragmentsCalled[currentFrag]);
-        fragmentsCalled[currentFrag] = (RecyclerFrag) manager.findFragmentByTag(fragTag);
-        if (fragmentsCalled[currentFrag] == null) {
+        System.out.println(fragmentCalled);
+        fragmentCalled = (RecyclerFrag) manager.findFragmentByTag(fragTag);
+        if (fragmentCalled == null) {
             // instanciation du fragment
-            fragmentsCalled[currentFrag] = new RecyclerFrag();
-            System.out.println(fragmentsCalled[currentFrag]);
-            fragmentsCalled[currentFrag].fragSearchTagID = fragSearchOptions;
-            manager.beginTransaction().replace(fragIdentifier, fragmentsCalled[currentFrag], fragTag).commit();
+            fragmentCalled = new RecyclerFrag();
+            System.out.println(fragmentCalled);
+            fragmentCalled.fragSearchTagID = fragSearchOptions;
+            manager.beginTransaction().replace(fragIdentifier, fragmentCalled, fragTag).commit();
         } else {
             // restauration du fragment
             manager.popBackStackImmediate(fragTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            manager.beginTransaction().show(fragmentsCalled[currentFrag]).commit();
+            manager.beginTransaction().show(fragmentCalled).commit();
         }
         if (requestReady) launchResponse(fragTagID, "");
-        currentFrag += 1;
     }
 
     protected void launchResponse(int fragTagID, String searchedData){
@@ -135,10 +127,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerFragCB {
     }
 
     protected void updateRecyclerFrag (List<Heroes> heroesSortedList) {
-        fragmentsCalled[currentFrag].data = heroesSortedList;
-        fragmentsCalled[currentFrag].adaptater = new HerosAdapter(fragmentsCalled[currentFrag], heroesSortedList);
-        fragmentsCalled[currentFrag].list_items.swapAdapter(fragmentsCalled[currentFrag].adaptater, false);
-        fragmentsCalled[currentFrag] = null;
+        fragmentCalled.data = heroesSortedList;
+        fragmentCalled.adaptater = new HerosAdapter(fragmentCalled, heroesSortedList);
+        fragmentCalled.list_items.swapAdapter(fragmentCalled.adaptater, false);
+        fragmentCalled = null;
     }
 
     // callback du recyclerview de recyclerfrag pour voir ses details

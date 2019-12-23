@@ -1,4 +1,5 @@
 # Application Mobile pour l'API de DOTA 2
 Application pour connaître les informations (à jour) des personnages du jeu DOTA 2
+
 #Explications techniques
-Le fichier main fait appel à l'API OpenDota au lancement, puis ses fragments traitent les données reçues.
+Le projet met en place une architecture MVC. Le modèle est DotaAPI.java, le contrôleur est 
